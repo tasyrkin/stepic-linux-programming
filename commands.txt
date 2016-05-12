@@ -1,5 +1,27 @@
 
 # create executable from hello.c and main.c
+# -c flag tells gcc only to compile, but not link
 gcc -o hello.o -c hello.c
 gcc -o main.o -c main.c
 gcc -o hello hello.o main.o
+
+# create dynamic library. Dynamic library naming convention is "lib<NameOfTheLibray>.so<versionNumber>"
+# -fPIC tell gcc to generate position independent code
+gcc -o libHello.so -shared -fPIC hello.c
+
+# show list symbols from object files
+nm libHello.so
+
+# build executable from code and shared library
+gcc -o hello main.c libHello.so
+
+# ld is the system mechanism for loading shared libraries
+# ld must know where the dynamic library is located, there are 2 ways:
+# 1. register library in ld (put the libary into directory which ld already knows), use env variable LD_LIBRARY_PATH
+# 2. use env LD_PRELOAD which looks there even before looking into its standard paths
+
+# setting env variable to a current directory
+export LD_LIBRARY_PATH=.
+
+# create executable without modifying LD_LIBRARY_PATH env variable
+gcc main.c -fPIC -L. -lHello -o hello
