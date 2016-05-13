@@ -43,3 +43,15 @@ export LD_LIBRARY_PATH=.
 # Following that, it searches for libraries in the directories specified by the -L parameter,
 # in the order specified on the command line
 gcc main.c -fPIC -L. -lHello -o hello
+
+# changing library to hello.cpp does not allow an executable to find it anymore
+gcc -o libHello.so -fPIC -shared hello.cpp
+
+# the hello_message was compiled to _Z13hello_messagePKc
+nm libHello.so
+
+# to find the original message use c++filt
+c++filt _Z13hello_messagePKc
+
+# this happens because the function hello_message was not declared according to c++ agreements -> extern "C"
+# extern "C" tells the C++ compiler to have "C" linkage, the compiler does not mangle the name
