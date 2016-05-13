@@ -7,6 +7,10 @@ gcc -o hello hello.o main.o
 
 # create dynamic library. Dynamic library naming convention is "lib<NameOfTheLibray>.so<versionNumber>"
 # -fPIC tell gcc to generate position independent code
+# What is position independent code? PIC is code that works no matter where in memory it is placed.
+# Because several different programs can all use one instance of your shared library,
+# the library cannot store things at fixed addresses, since the location of that library in memory
+# will vary from program to program.
 gcc -o libHello.so -shared -fPIC hello.c
 
 # show list symbols from object files
@@ -20,8 +24,22 @@ gcc -o hello main.c libHello.so
 # 1. register library in ld (put the libary into directory which ld already knows), use env variable LD_LIBRARY_PATH
 # 2. use env LD_PRELOAD which looks there even before looking into its standard paths
 
+# from http://www.cprogramming.com/tutorial/shared-libraries-linux-gcc.html
+# The default GNU loader, ld.so, looks for libraries in the following order:
+#  It looks in the DT_RPATH section of the executable, unless there is a DT_RUNPATH section.
+#  It looks in LD_LIBRARY_PATH. This is skipped if the executable is setuid/setgid for security reasons.
+#  It looks in the DT_RUNPATH section of the executable unless the setuid/setgid bits are set (for security reasons).
+#  It looks in the cache file /etc/ld/so/cache (disabled with the ‘-z nodeflib’ linker option).
+#  It looks in the default directories /lib then /usr/lib (disabled with the ‘-z nodeflib’ linker option).
+
 # setting env variable to a current directory
+# exporting the environment variable is necessary for child processes to find it
 export LD_LIBRARY_PATH=.
 
 # create executable without modifying LD_LIBRARY_PATH env variable
+# -lHello flag is looking for libHello.so library
+# -L. flag is the path where to search shared libraries
+# GCC first searches for libraries in /usr/local/lib, then in /usr/lib.
+# Following that, it searches for libraries in the directories specified by the -L parameter,
+# in the order specified on the command line
 gcc main.c -fPIC -L. -lHello -o hello
