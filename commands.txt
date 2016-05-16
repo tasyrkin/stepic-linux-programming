@@ -6,7 +6,7 @@ gcc -o main.o -c main.c
 gcc -o hello hello.o main.o
 
 # create dynamic library. Dynamic library naming convention is "lib<NameOfTheLibray>.so<versionNumber>"
-# -fPIC tell gcc to generate position independent code
+# -fPIC tells gcc to generate position independent code
 # What is position independent code? PIC is code that works no matter where in memory it is placed.
 # Because several different programs can all use one instance of your shared library,
 # the library cannot store things at fixed addresses, since the location of that library in memory
@@ -55,3 +55,6 @@ c++filt _Z13hello_messagePKc
 
 # this happens because the function hello_message was not declared according to c++ agreements -> extern "C"
 # extern "C" tells the C++ compiler to have "C" linkage, the compiler does not mangle the name
+
+# print shared library dependencies 
+ldd hello
