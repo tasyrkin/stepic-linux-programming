@@ -2,10 +2,10 @@
 all: exe lib
 
 exe: main.c lib
-	gcc main.c -lHello -L. -o hello 
+	gcc main.c -fPIC -ldl -o hello
 
 lib: hello.c
-	gcc hello.c -shared -fPIC -o libHello.so 
+	gcc hello.c -shared -fPIC -o libHello.so
 
 clean:
 #- before rm tells make to ignore the operation

@@ -4,5 +4,8 @@
 #library files
 *.so
 
-# executables
+#executables
 hello
+
+#vim
+*swp
