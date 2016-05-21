@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 #include <dlfcn.h>
 #include <stdlib.h>
 
@@ -47,15 +48,18 @@ int main(int argc, char**argv){
     printf("%s <libName> <functName> <argument>\n", argv[0]);
     return 1;
   }  
+  char lib_location[50] = { 0 };
+  strcat(lib_location, "./");
 
   const char* lib_name = argv[1];
+  strcat(lib_location, lib_name);
   const char* funct_name = argv[2];
   int funct_arg = atoi(argv[3]);
 
-  struct dl_data* handle = init_library(lib_name, funct_name);
+  struct dl_data* handle = init_library(lib_location, funct_name);
 
   if(NULL == handle) {
-    printf("Unable to initialize library [%s] and its method [%s], exiting...\n", lib_name, funct_name);
+    printf("Unable to initialize library [%s] and its method [%s], exiting...\n", lib_location, funct_name);
     close_library(handle);
     return 1;
   }
