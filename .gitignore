@@ -6,6 +6,7 @@
 
 #executables
 hello
+traverse_dir
 
 #vim
 *swp
